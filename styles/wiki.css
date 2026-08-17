@@ -1,0 +1,17 @@
+.article-layout { display:grid; grid-template-columns:minmax(0, 1fr) 270px; gap:50px; padding:70px 0; }
+.article { min-width:0; }
+.article-meta { display:flex; gap:15px; color:#748092; font-size:12px; align-items:center; }
+.article h1 { font-size:clamp(38px,5vw,62px); letter-spacing:-.055em; line-height:1.02; margin:17px 0; }
+.article-summary { font-size:18px; line-height:1.7; color:var(--muted); padding-bottom:28px; border-bottom:1px solid var(--border); }
+.markdown { line-height:1.8; font-size:16px; }
+.markdown h1, .markdown h2, .markdown h3 { line-height:1.2; letter-spacing:-.03em; margin-top:38px; }
+.markdown h2 { font-size:29px; }
+.markdown h3 { font-size:22px; }
+.markdown p { color:#c7ced9; }
+.markdown a { color:var(--accent-2); }
+.markdown code { background:#161d29; padding:3px 6px; border-radius:5px; }
+.markdown pre { overflow:auto; padding:18px; border:1px solid var(--border); border-radius:13px; background:#070a0f; }
+.markdown blockquote { border-left:3px solid var(--accent); padding-left:18px; color:#aeb7c5; }
+.article-aside { padding-top:50px; }
+.side-card { display:grid; gap:12px; position:sticky; top:100px; }
+.side-card p { color:var(--muted); font-size:13px; line-height:1.6; }
