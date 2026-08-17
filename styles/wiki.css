@@ -1,17 +1,360 @@
-.article-layout { display:grid; grid-template-columns:minmax(0, 1fr) 270px; gap:50px; padding:70px 0; }
-.article { min-width:0; }
-.article-meta { display:flex; gap:15px; color:#748092; font-size:12px; align-items:center; }
-.article h1 { font-size:clamp(38px,5vw,62px); letter-spacing:-.055em; line-height:1.02; margin:17px 0; }
-.article-summary { font-size:18px; line-height:1.7; color:var(--muted); padding-bottom:28px; border-bottom:1px solid var(--border); }
-.markdown { line-height:1.8; font-size:16px; }
-.markdown h1, .markdown h2, .markdown h3 { line-height:1.2; letter-spacing:-.03em; margin-top:38px; }
-.markdown h2 { font-size:29px; }
-.markdown h3 { font-size:22px; }
-.markdown p { color:#c7ced9; }
-.markdown a { color:var(--accent-2); }
-.markdown code { background:#161d29; padding:3px 6px; border-radius:5px; }
-.markdown pre { overflow:auto; padding:18px; border:1px solid var(--border); border-radius:13px; background:#070a0f; }
-.markdown blockquote { border-left:3px solid var(--accent); padding-left:18px; color:#aeb7c5; }
-.article-aside { padding-top:50px; }
-.side-card { display:grid; gap:12px; position:sticky; top:100px; }
-.side-card p { color:var(--muted); font-size:13px; line-height:1.6; }
+/* ================================
+   WIKI ARTICLE
+   ================================ */
+
+.article-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 64px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 56px 28px 100px;
+}
+
+.article {
+  min-width: 0;
+  max-width: 850px;
+}
+
+/* ---------- META ---------- */
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: #8d98a9;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.article-meta > * {
+  display: inline-flex;
+  align-items: center;
+}
+
+.article-meta > * + *::before {
+  content: "•";
+  margin-right: 10px;
+  color: #4c5666;
+}
+
+/* ---------- TITLE ---------- */
+
+.article h1 {
+  max-width: 900px;
+  margin: 18px 0 20px;
+  color: #f5f7fb;
+  font-size: clamp(42px, 6vw, 68px);
+  font-weight: 760;
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+
+/* ---------- SUMMARY ---------- */
+
+.article-summary {
+  max-width: 780px;
+  margin: 0 0 38px;
+  padding: 0 0 30px;
+  color: #9ca7b7;
+  border-bottom: 1px solid #202735;
+  font-size: 18px;
+  line-height: 1.75;
+}
+
+/* ---------- MARKDOWN ---------- */
+
+.markdown {
+  color: #d7dce5;
+  font-size: 16px;
+  line-height: 1.85;
+  overflow-wrap: break-word;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4 {
+  color: #f1f4f8;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+.markdown h1 {
+  margin: 48px 0 18px;
+  font-size: 38px;
+}
+
+.markdown h2 {
+  margin: 46px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #202735;
+  font-size: 29px;
+}
+
+.markdown h3 {
+  margin: 34px 0 12px;
+  font-size: 22px;
+}
+
+.markdown h4 {
+  margin: 28px 0 10px;
+  font-size: 18px;
+}
+
+.markdown p {
+  margin: 0 0 20px;
+  color: #c7ced9;
+}
+
+.markdown strong {
+  color: #f1f4f8;
+  font-weight: 700;
+}
+
+.markdown em {
+  color: #d9dee7;
+}
+
+.markdown a {
+  color: var(--accent-2);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.markdown a:hover {
+  color: #fff;
+  border-bottom-color: currentColor;
+}
+
+/* ---------- LISTS ---------- */
+
+.markdown ul,
+.markdown ol {
+  margin: 18px 0 24px;
+  padding-left: 28px;
+}
+
+.markdown li {
+  margin: 7px 0;
+  color: #c7ced9;
+}
+
+.markdown li::marker {
+  color: #667286;
+}
+
+/* ---------- INLINE CODE ---------- */
+
+.markdown code {
+  padding: 3px 7px;
+  border: 1px solid #252e3d;
+  border-radius: 6px;
+  background: #111722;
+  color: #d9e1ee;
+  font-family:
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    monospace;
+  font-size: 0.88em;
+}
+
+/* ---------- CODE BLOCK ---------- */
+
+.markdown pre {
+  margin: 24px 0;
+  padding: 20px;
+  overflow-x: auto;
+  border: 1px solid #252e3d;
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      145deg,
+      #0c1119,
+      #070a0f
+    );
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.markdown pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #dce3ee;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ---------- BLOCKQUOTE ---------- */
+
+.markdown blockquote {
+  margin: 28px 0;
+  padding: 15px 20px;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  background: rgba(255, 255, 255, 0.025);
+  color: #aeb7c5;
+}
+
+.markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- TABLE ---------- */
+
+.markdown table {
+  width: 100%;
+  margin: 28px 0;
+  border-collapse: collapse;
+  overflow: hidden;
+  border: 1px solid #252e3d;
+  border-radius: 12px;
+}
+
+.markdown th,
+.markdown td {
+  padding: 12px 14px;
+  border: 1px solid #252e3d;
+  text-align: left;
+}
+
+.markdown th {
+  background: #111722;
+  color: #f1f4f8;
+  font-weight: 650;
+}
+
+.markdown td {
+  color: #c7ced9;
+}
+
+/* ---------- HORIZONTAL RULE ---------- */
+
+.markdown hr {
+  height: 1px;
+  margin: 42px 0;
+  border: 0;
+  background: #202735;
+}
+
+/* ---------- IMAGES ---------- */
+
+.markdown img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 28px 0;
+  border: 1px solid #252e3d;
+  border-radius: 14px;
+}
+
+/* ---------- SIDEBAR ---------- */
+
+.article-aside {
+  min-width: 0;
+  padding-top: 46px;
+}
+
+.side-card {
+  position: sticky;
+  top: 96px;
+  display: grid;
+  gap: 14px;
+}
+
+.side-card > * {
+  margin: 0;
+}
+
+.side-card p {
+  color: #8995a7;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.side-card a {
+  color: #b8c2d1;
+  text-decoration: none;
+}
+
+.side-card a:hover {
+  color: #fff;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 900px) {
+  .article-layout {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    padding: 42px 20px 70px;
+  }
+
+  .article {
+    max-width: none;
+  }
+
+  .article-aside {
+    padding-top: 0;
+  }
+
+  .side-card {
+    position: static;
+  }
+
+  .article h1 {
+    font-size: clamp(38px, 11vw, 58px);
+  }
+}
+
+@media (max-width: 600px) {
+  .article-layout {
+    padding: 30px 16px 55px;
+  }
+
+  .article h1 {
+    margin-top: 14px;
+    font-size: 40px;
+    line-height: 1;
+  }
+
+  .article-summary {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .markdown {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .markdown h2 {
+    font-size: 25px;
+  }
+
+  .markdown h3 {
+    font-size: 20px;
+  }
+
+  .markdown pre {
+    margin-left: -4px;
+    margin-right: -4px;
+    padding: 15px;
+    border-radius: 11px;
+  }
+
+  .markdown table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
