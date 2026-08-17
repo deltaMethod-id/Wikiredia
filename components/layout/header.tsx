@@ -10,14 +10,22 @@ import {
 export function Header() {
   return (
     <header className="site-header">
-      <Link href="/" className="brand" aria-label="Wikireadia Home">
+      <Link
+        href="/"
+        className="brand"
+        aria-label="Wikireadia Home"
+      >
         <span className="brand-mark">
           <BookOpen size={18} />
         </span>
+
         <span>Wikireadia</span>
       </Link>
 
-      <nav className="header-nav" aria-label="Main navigation">
+      <nav
+        className="header-nav"
+        aria-label="Main navigation"
+      >
         <Link href="/search">
           <Search size={17} />
           <span>Search</span>
