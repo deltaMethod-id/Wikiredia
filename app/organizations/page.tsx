@@ -2,26 +2,31 @@ import Link from "next/link";
 import { Building2, Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 export default async function OrganizationsPage() {
   const supabase = await createClient();
 
-  const { data: organizations, error } = await supabase
+  const {
+    data: organizations,
+    error,
+  } = await supabase
     .from("organizations")
     .select("id, name, slug, description, created_by, created_at")
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Failed to load organizations:", error);
+    console.error("Organizations query failed:", error);
   }
 
   return (
     <main className="organizations-page">
-      <div className="page-header">
+      <section className="page-header">
         <div>
           <p className="eyebrow">Wikireadia</p>
           <h1>Organizations</h1>
           <p>
-            Browse organizations and discover their wiki knowledge.
+            Organizations manage their own wiki knowledge and members.
           </p>
         </div>
 
@@ -29,15 +34,15 @@ export default async function OrganizationsPage() {
           <Plus size={18} />
           Create organization
         </Link>
-      </div>
+      </section>
 
       {error ? (
-        <div className="error-card">
-          <h2>Unable to load organizations</h2>
+        <section className="error-card">
+          <h2>Could not load organizations</h2>
           <p>{error.message}</p>
-        </div>
-      ) : organizations?.length ? (
-        <div className="organization-grid">
+        </section>
+      ) : organizations && organizations.length > 0 ? (
+        <section className="organization-grid">
           {organizations.map((organization) => (
             <Link
               key={organization.id}
@@ -45,40 +50,38 @@ export default async function OrganizationsPage() {
               className="organization-card"
             >
               <div className="organization-icon">
-                <Building2 size={22} />
+                <Building2 size={24} />
               </div>
 
-              <div>
+              <div className="organization-content">
                 <h2>{organization.name}</h2>
 
-                <p className="organization-slug">
+                <span className="organization-slug">
                   @{organization.slug}
-                </p>
+                </span>
 
-                {organization.description && (
-                  <p className="organization-description">
-                    {organization.description}
-                  </p>
-                )}
+                <p>
+                  {organization.description || "No description provided."}
+                </p>
               </div>
             </Link>
           ))}
-        </div>
+        </section>
       ) : (
-        <div className="empty-state">
-          <Building2 size={40} />
+        <section className="empty-state">
+          <Building2 size={42} />
 
-          <h2>No organizations yet</h2>
+          <h2>No organizations</h2>
 
           <p>
-            Create the first Wikireadia organization.
+            You haven't created or joined an organization yet.
           </p>
 
           <Link href="/organizations/create" className="button">
             <Plus size={18} />
             Create organization
           </Link>
-        </div>
+        </section>
       )}
     </main>
   );
