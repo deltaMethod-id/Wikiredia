@@ -1,90 +1,48 @@
-import { notFound, redirect } from "next/navigation";
-import {
-  getCurrentUser,
-  getOrganizationBySlug,
-  getOrganizationMemberRole,
-} from "@/lib/organizations/queries";
-import { OrganizationHeader } from "@/components/organization/organization-header";
+import { notFound } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
-type Props = {
+interface OrganizationPageProps {
   params: Promise<{
     slug: string;
   }>;
-};
-
-export async function generateMetadata({
-  params,
-}: Props) {
-  const { slug } = await params;
-
-  const organization =
-    await getOrganizationBySlug(slug);
-
-  return {
-    title: organization
-      ? `${organization.name} | Wikireadia`
-      : "Organization | Wikireadia",
-  };
 }
 
 export default async function OrganizationPage({
   params,
-}: Props) {
+}: OrganizationPageProps) {
   const { slug } = await params;
 
-  const user = await getCurrentUser();
+  const supabase = await createClient();
 
-  if (!user) {
-    redirect("/settings");
-  }
+  const { data: organization, error } = await supabase
+    .from("organizations")
+    .select("*")
+    .eq("slug", slug)
+    .single();
 
-  const organization =
-    await getOrganizationBySlug(slug);
-
-  if (!organization) {
-    notFound();
-  }
-
-  const role =
-    await getOrganizationMemberRole(
-      organization.id
-    );
-
-  if (!role) {
+  if (error || !organization) {
     notFound();
   }
 
   return (
-    <main className="page-container">
-      <OrganizationHeader
-        organization={organization}
-        role={role}
-      />
-
-      <section className="organization-overview">
-        <h2>Organization Overview</h2>
-
-        <p>
-          Your role: <strong>{role}</strong>
-        </p>
-
-        <div className="organization-stats">
-          <div>
-            <strong>Organization</strong>
-            <span>{organization.name}</span>
-          </div>
-
-          <div>
-            <strong>Slug</strong>
-            <span>{organization.slug}</span>
-          </div>
-
-          <div>
-            <strong>Your role</strong>
-            <span>{role}</span>
-          </div>
+    <main className="organization-page">
+      <div className="organization-header">
+        <div className="organization-logo">
+          {organization.name.charAt(0).toUpperCase()}
         </div>
-      </section>
+
+        <div>
+          <h1>{organization.name}</h1>
+          <p>@{organization.slug}</p>
+        </div>
+      </div>
+
+      {organization.description && (
+        <section className="organization-description">
+          <h2>About this organization</h2>
+          <p>{organization.description}</p>
+        </section>
+      )}
     </main>
   );
 }
