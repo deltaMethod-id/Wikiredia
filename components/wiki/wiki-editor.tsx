@@ -1,45 +1,96 @@
 "use client";
 
 import { useState } from "react";
-import { Save } from "lucide-react";
 
-interface Props {
-  initialTitle?: string;
-  initialSummary?: string;
-  initialContent?: string;
-  onSave?: (data: { title: string; summary: string; content: string }) => Promise<void>;
+interface Organization {
+  id: string;
+  name: string;
+  slug: string;
 }
 
-export function WikiEditor({ initialTitle = "", initialSummary = "", initialContent = "", onSave }: Props) {
-  const [title, setTitle] = useState(initialTitle);
-  const [summary, setSummary] = useState(initialSummary);
-  const [content, setContent] = useState(initialContent);
-  const [saving, setSaving] = useState(false);
+interface WikiEditorProps {
+  organizations: Organization[];
+}
 
-  async function submit() {
-    if (!title.trim() || !content.trim() || !onSave) return;
-    setSaving(true);
-    try { await onSave({ title, summary, content }); }
-    finally { setSaving(false); }
-  }
+export function WikiEditor({
+  organizations,
+}: WikiEditorProps) {
+  const [organizationId, setOrganizationId] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   return (
-    <section className="editor-shell">
-      <div className="field">
-        <label>Wiki title</label>
-        <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Enter a title..." />
+    <form className="wiki-editor">
+      <div className="form-group">
+        <label htmlFor="organization">
+          Organization
+        </label>
+
+        <select
+          id="organization"
+          name="organization_id"
+          value={organizationId}
+          onChange={(event) =>
+            setOrganizationId(event.target.value)
+          }
+          required
+        >
+          <option value="">
+            Select an organization
+          </option>
+
+          {organizations.map((organization) => (
+            <option
+              key={organization.id}
+              value={organization.id}
+            >
+              {organization.name} (@{organization.slug})
+            </option>
+          ))}
+        </select>
+
+        {organizations.length === 0 && (
+          <p className="form-hint">
+            You don't have any organizations yet.
+          </p>
+        )}
       </div>
-      <div className="field">
-        <label>Summary</label>
-        <input value={summary} onChange={e => setSummary(e.target.value)} placeholder="Short description..." />
+
+      <div className="form-group">
+        <label htmlFor="title">Wiki title</label>
+
+        <input
+          id="title"
+          name="title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          placeholder="Enter wiki title"
+          required
+        />
       </div>
-      <div className="field">
-        <label>Markdown content</label>
-        <textarea value={content} onChange={e => setContent(e.target.value)} placeholder="# Your wiki content..." rows={22}/>
+
+      <div className="form-group">
+        <label htmlFor="content">Content</label>
+
+        <textarea
+          id="content"
+          name="content"
+          value={content}
+          onChange={(event) =>
+            setContent(event.target.value)
+          }
+          placeholder="Write your wiki..."
+          rows={15}
+          required
+        />
       </div>
-      <button className="button primary" onClick={submit} disabled={saving || !title.trim() || !content.trim()}>
-        <Save size={17}/> {saving ? "Saving..." : "Save wiki"}
+
+      <button
+        type="submit"
+        disabled={!organizationId}
+      >
+        Create Wiki
       </button>
-    </section>
+    </form>
   );
 }
