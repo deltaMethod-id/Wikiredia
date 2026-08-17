@@ -1,4 +1,26 @@
-.editor-shell { border:1px solid var(--border); border-radius:20px; background:#0d1119; padding:24px; margin-bottom:80px; display:grid; gap:18px; }
-.field { display:grid; gap:8px; color:#b9c2cf; font-size:13px; font-weight:650; }
-.field textarea { resize:vertical; line-height:1.65; }
-.field select { appearance:auto; }
+.editor-shell {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: #0d1119;
+  padding: 24px;
+  margin-bottom: 80px;
+  display: grid;
+  gap: 18px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  color: #b9c2cf;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.field textarea {
+  resize: vertical;
+  line-height: 1.65;
+}
+
+.field select {
+  appearance: auto;
+}
