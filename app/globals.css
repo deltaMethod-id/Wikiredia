@@ -2,6 +2,7 @@
 @import "../styles/wiki.css";
 @import "../styles/editor.css";
 @import "../styles/responsive.css";
+@import "../styles/globals.css";
 
 :root {
   --bg: #070a0f;
