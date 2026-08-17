@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft, Building2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 interface OrganizationPageProps {
@@ -7,6 +9,8 @@ interface OrganizationPageProps {
   }>;
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function OrganizationPage({
   params,
 }: OrganizationPageProps) {
@@ -14,35 +18,51 @@ export default async function OrganizationPage({
 
   const supabase = await createClient();
 
-  const { data: organization, error } = await supabase
+  const {
+    data: organization,
+    error,
+  } = await supabase
     .from("organizations")
-    .select("*")
+    .select(
+      "id, name, slug, description, created_by, created_at"
+    )
     .eq("slug", slug)
-    .single();
+    .maybeSingle();
 
-  if (error || !organization) {
+  if (error) {
+    console.error("Organization query failed:", error);
+    notFound();
+  }
+
+  if (!organization) {
     notFound();
   }
 
   return (
     <main className="organization-page">
-      <div className="organization-header">
-        <div className="organization-logo">
-          {organization.name.charAt(0).toUpperCase()}
+      <Link href="/organizations" className="back-link">
+        <ArrowLeft size={17} />
+        Organizations
+      </Link>
+
+      <section className="organization-hero">
+        <div className="organization-icon large">
+          <Building2 size={34} />
         </div>
 
         <div>
           <h1>{organization.name}</h1>
           <p>@{organization.slug}</p>
         </div>
-      </div>
+      </section>
 
-      {organization.description && (
-        <section className="organization-description">
-          <h2>About this organization</h2>
-          <p>{organization.description}</p>
-        </section>
-      )}
+      <section className="organization-description">
+        <h2>About</h2>
+
+        <p>
+          {organization.description || "No description provided."}
+        </p>
+      </section>
     </main>
   );
 }
