@@ -1,48 +1,85 @@
 import Link from "next/link";
-import { Plus } from "lucide-react";
-import { redirect } from "next/navigation";
-import { getCurrentUser, getUserOrganizations } from "@/lib/organizations/queries";
-import { OrganizationList } from "@/components/organization/organization-list";
-
-export const metadata = {
-  title: "Organizations | Wikireadia",
-  description:
-    "Manage your Wikireadia organizations.",
-};
+import { Building2, Plus } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function OrganizationsPage() {
-  const user = await getCurrentUser();
+  const supabase = await createClient();
 
-  if (!user) {
-    redirect("/settings");
+  const { data: organizations, error } = await supabase
+    .from("organizations")
+    .select("id, name, slug, description, created_by, created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to load organizations:", error);
   }
 
-  const organizations =
-    await getUserOrganizations();
-
   return (
-    <main className="page-container">
-      <div className="page-heading">
+    <main className="organizations-page">
+      <div className="page-header">
         <div>
+          <p className="eyebrow">Wikireadia</p>
           <h1>Organizations</h1>
           <p>
-            Create and manage your Wikireadia
-            organizations.
+            Browse organizations and discover their wiki knowledge.
           </p>
         </div>
 
-        <Link
-          href="/organizations/create"
-          className="button"
-        >
-          <Plus size={17} />
-          Create Organization
+        <Link href="/organizations/create" className="button">
+          <Plus size={18} />
+          Create organization
         </Link>
       </div>
 
-      <OrganizationList
-        organizations={organizations}
-      />
+      {error ? (
+        <div className="error-card">
+          <h2>Unable to load organizations</h2>
+          <p>{error.message}</p>
+        </div>
+      ) : organizations?.length ? (
+        <div className="organization-grid">
+          {organizations.map((organization) => (
+            <Link
+              key={organization.id}
+              href={`/organizations/${organization.slug}`}
+              className="organization-card"
+            >
+              <div className="organization-icon">
+                <Building2 size={22} />
+              </div>
+
+              <div>
+                <h2>{organization.name}</h2>
+
+                <p className="organization-slug">
+                  @{organization.slug}
+                </p>
+
+                {organization.description && (
+                  <p className="organization-description">
+                    {organization.description}
+                  </p>
+                )}
+              </div>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="empty-state">
+          <Building2 size={40} />
+
+          <h2>No organizations yet</h2>
+
+          <p>
+            Create the first Wikireadia organization.
+          </p>
+
+          <Link href="/organizations/create" className="button">
+            <Plus size={18} />
+            Create organization
+          </Link>
+        </div>
+      )}
     </main>
   );
 }
